@@ -16,4 +16,9 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', 'User\ActionController@logout');
     Route::get('/user/dashboard', 'User\PageController@showDashboard');
+
+    Route::get('/user/tasks/{id}', 'User\PageController@showTask');
+
+    Route::post('/user/addNewTask', 'User\ActionController@addNewTask');
+    Route::post('/user/deleteTask', 'User\ActionController@deleteTask');
 });
