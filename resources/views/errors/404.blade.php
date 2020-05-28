@@ -6,7 +6,9 @@
 
 <body>
 
-<h1> Nema takava stranica bratan</h1>
+<h1> 404 | This page does not exist</h1>
+
+You can go back from <a href="/user/dashboard"> here </a>
 
 </body>
 

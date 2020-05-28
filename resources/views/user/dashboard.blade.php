@@ -93,12 +93,15 @@
             },
 
             deleteTask(todo_id) {
-                axios.post('/user/deleteTask', {todo_id: todo_id}).then((response) => {
-                    alert(response.data.message);
-                    if (response.data.success === true) {
-                        location.reload();
-                    }
-                });
+                let flag = confirm('Are you sure you want to delete it?');
+                if (flag === true) {
+                    axios.post('/user/deleteTask', {todo_id: todo_id}).then((response) => {
+                        alert(response.data.message);
+                        if (response.data.success === true) {
+                            location.reload();
+                        }
+                    });
+                }
             },
 
         }

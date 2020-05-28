@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Services\TodoService;
-use App\ToDo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +39,23 @@ class ActionController extends Controller {
         }
 
         $result = TodoService::deleteTask($request->all());
+
+        return response()->json($result);
+
+    }
+
+    public function updateTask(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'id'        =>  'bail|integer',
+            'title'     =>  'bail',
+            'date'      =>  'bail|date',
+            'time'      =>  'bail',
+        ]);
+        if($validator->fails()) {
+            return $this->returnCustomJsonValidatorError($validator);
+        }
+
+        $result = TodoService::updateTask($request->all());
 
         return response()->json($result);
 

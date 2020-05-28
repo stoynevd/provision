@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Jobs\SendMail;
+use App\Mail\CreateNotification;
 use App\ToDo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TodoService {
 
@@ -19,11 +22,13 @@ class TodoService {
                 ];
             }
 
-            ToDo::create([
+            $todo = ToDo::create([
                 'user_id'     => Auth::user()->id,
                 'title'       => $data['title'],
                 'datetime'    => $date
             ]);
+
+            dispatch(new SendMail($todo));
 
             return [
                 'success' => true,
@@ -31,7 +36,7 @@ class TodoService {
             ];
 
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            \Log::error('[' . __CLASS__ . ' --> ' . __FUNCTION__ . ']: ' . $e->getMessage());
 
             return [
                 'success' => false,
@@ -60,11 +65,48 @@ class TodoService {
             ];
 
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            \Log::error('[' . __CLASS__ . ' --> ' . __FUNCTION__ . ']: ' . $e->getMessage());
 
             return [
                 'success' => false,
                 'message' => 'Something went wrong, please try again later.'
+            ];
+        }
+
+    }
+
+    public static function updateTask($data) {
+
+        try {
+
+            if (!$todo = Auth::user()->todos()->find($data['id'])) {
+                return [
+                    'success' => false,
+                    'message' => 'Something went wrong, please try again.',
+                ];
+            }
+
+            unset($data['id']);
+            $data = array_filter($data);
+
+            $todo->fill([
+                'title'    => isset($data['title']) ? $data['title'] : $todo->title,
+                'datetime' => Carbon::parse($data['date'] . $data['time']),
+            ]);
+
+            $todo->save();
+
+            return [
+                'success' => true,
+                'message' => 'You have successfully edited the to do task',
+            ];
+
+        } catch (\Exception  $e) {
+            \Log::error('[' . __CLASS__ . ' --> ' . __FUNCTION__ . ']: ' . $e->getMessage());
+
+            return [
+                'success' => false,
+                'message' => 'Something went wrong, please try again.',
             ];
         }
 

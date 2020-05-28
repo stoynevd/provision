@@ -20,5 +20,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/tasks/{id}', 'User\PageController@showTask');
 
     Route::post('/user/addNewTask', 'User\ActionController@addNewTask');
+    Route::post('/user/updateTask', 'User\ActionController@updateTask');
     Route::post('/user/deleteTask', 'User\ActionController@deleteTask');
 });

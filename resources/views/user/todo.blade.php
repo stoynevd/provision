@@ -6,31 +6,55 @@
     <script src="/js/axios.min.js"></script>
 </head>
 <body>
-<div class="container" id="dashboard">
-    <label><b>Title</b></label>
-    <input type="text" value="{{ $title }}" name="uname" readonly>
-    <input type="text" placeholder="Enter Title" name="uname" required>
+<div class="container" id="todo">
+
+    <h2>
+        To Do Task: {{ $id }}
+    </h2>
+
+    <label><b>New Title</b></label>
+    <input v-model="newTitle" type="text" placeholder="Enter New Title" name="uname">
     <br><br>
-    <label for="birthday">Date</label>
-    <input value="{{ $date }}" type="date" readonly>
-    <input type="date">
-    <label for="appt">Select a time:</label>
-    <input type="time" name="appt" value="{{ $time }}" readonly>
-    <input type="time" name="appt">
+    <label for="birthday">New Date</label>
+    <input v-model="newDate" type="date">
     <br><br>
-    <button @click="test" type="submit">Update Task</button>
+    <label for="appt">New Time:</label>
+    <input v-model="newTime" type="time" name="appt">
+    <br><br>
+    <button @click="updateTask" type="submit">Update Task</button>
+    <button @click="window.location='/user/dashboard'" type="submit">Dashboard</button>
 </div>
+
 </body>
 
 <script>
     new Vue({
-        el: '#dashboard',
+        el: '#todo',
         data: () => ({
+            id: {!! $id !!},
+            newTitle: '{!! $title !!}',
+            newDate: '{!! $date !!}',
+            newTime: '{!! $time !!}',
         }),
+
+        mounted: {
+        },
         methods: {
 
-            test() {
-                console.log(this.date);
+            updateTask() {
+
+                axios.post('/user/updateTask', {
+                    id: {{ $id }},
+                    title: this.newTitle,
+                    date: this.newDate,
+                    time: this.newTime,
+                }).then((response) => {
+                    alert(response.data.message);
+                    if (response.data.success === true) {
+                        window.location='/user/dashboard';
+                    }
+                });
+
             }
 
         }
