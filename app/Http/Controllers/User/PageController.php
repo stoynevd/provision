@@ -20,10 +20,7 @@ class PageController extends Controller {
             return redirect('/user/dashboard');
         }
 
-        $date = Carbon::parse($todo->datetime)->format('Y-m-d');
-        $time = Carbon::parse($todo->datetime)->format('H:m');
-
-        return view('user/todo')->with(['id' => $todo->id, 'title' => $todo->title, 'date' => $date, 'time' => $time]);
+        return view('user/todo')->with(['todo' => $todo]);
     }
 
 }

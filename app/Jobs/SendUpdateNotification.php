@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\CreateNotification;
-use App\ToDo;
+use App\Mail\UpdateNotification;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,29 +13,32 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Class SendMail
+ * Class SendUpdateNotification
  * @package App\Jobs
- * The jobs is used to send emails to the users at a creation of a new To Do task
+ * This job sends an email to the user every time he/she updates a To Do task
  */
 
-class SendMail implements ShouldQueue
+class SendUpdateNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $todo;
 
-    public function __construct(ToDo $todo) {
+    public function __construct($todo) {
         $this->todo = $todo;
     }
 
     public function handle() {
+
         try {
 
             $user = User::find($this->todo->user_id);
 
-            Mail::to($user->email)->send(new CreateNotification($this->todo->title, $this->todo->datetime));
+            Mail::to($user->email)->send(new UpdateNotification($this->todo->title, $this->todo->datetime));
         } catch (\Exception $e) {
             \Log::error('[' . __CLASS__ . ' --> ' . __FUNCTION__ . ']: ' . $e->getMessage());
         }
+
+
     }
 }

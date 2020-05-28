@@ -8,18 +8,14 @@
 <body>
 <div class="container" id="todo">
 
-    <h2>
-        To Do Task: {{ $id }}
-    </h2>
-
     <label><b>New Title</b></label>
-    <input v-model="newTitle" type="text" placeholder="Enter New Title" name="uname">
+    <input v-model="todo.title" type="text" placeholder="Enter New Title" name="uname">
     <br><br>
     <label for="birthday">New Date</label>
-    <input v-model="newDate" type="date">
+    <input v-model="todo.date" type="date">
     <br><br>
     <label for="appt">New Time:</label>
-    <input v-model="newTime" type="time" name="appt">
+    <input v-model="todo.time" type="time" name="appt">
     <br><br>
     <button @click="updateTask" type="submit">Update Task</button>
     <button @click="window.location='/user/dashboard'" type="submit">Dashboard</button>
@@ -31,10 +27,7 @@
     new Vue({
         el: '#todo',
         data: () => ({
-            id: {!! $id !!},
-            newTitle: '{!! $title !!}',
-            newDate: '{!! $date !!}',
-            newTime: '{!! $time !!}',
+            todo: {!! $todo !!}
         }),
 
         mounted: {
@@ -44,10 +37,10 @@
             updateTask() {
 
                 axios.post('/user/updateTask', {
-                    id: {{ $id }},
-                    title: this.newTitle,
-                    date: this.newDate,
-                    time: this.newTime,
+                    id: this.todo.id,
+                    title: this.todo.title,
+                    date: this.todo.date,
+                    time: this.todo.time,
                 }).then((response) => {
                     alert(response.data.message);
                     if (response.data.success === true) {

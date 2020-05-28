@@ -12,7 +12,8 @@ class ToDo extends Model {
     protected $fillable = [
         'user_id',
         'title',
-        'datetime',
+        'date',
+        'time',
     ];
 
     public function user() {

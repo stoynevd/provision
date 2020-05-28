@@ -17,13 +17,15 @@
     <table id="t01">
         <tr>
             <th>Title</th>
-            <th>Datetime</th>
+            <th>Date</th>
+            <th>Time</th>
             <th>Delete</th>
             <th>Edit</th>
         </tr>
         <tr v-for="todo in todos">
             <td>@{{ todo.title }}</td>
-            <td>@{{ todo.datetime }}</td>
+            <td>@{{ todo.date }}</td>
+            <td>@{{ todo.time }}</td>
             <td>
                 <button @click="deleteTask(todo.id)">Delete</button>
             </td>

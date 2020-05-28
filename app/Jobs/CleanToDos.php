@@ -10,6 +10,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class CleanToDos
+ * @package App\Jobs
+ * Cleans all the To Do tasks which passed
+ * The job is run from the scheduler once every week
+ */
 class CleanToDos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

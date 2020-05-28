@@ -12,7 +12,8 @@ class CreateToDosTable extends Migration {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->string('title');
-            $table->timestamp('datetime');
+            $table->date('date');
+            $table->time('time');
             $table->softDeletes();
             $table->timestamps();
 

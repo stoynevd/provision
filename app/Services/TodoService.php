@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Jobs\SendMail;
+use App\Jobs\SendUpdateNotification;
 use App\Mail\CreateNotification;
+use App\Mail\UpdateNotification;
 use App\ToDo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,7 @@ class TodoService {
 
     public static function createToDo($data) {
         try {
+
             $date = Carbon::parse($data['date'] . $data['time']);
 
             if ($date->isPast() == 1) {
@@ -25,7 +28,8 @@ class TodoService {
             $todo = ToDo::create([
                 'user_id'     => Auth::user()->id,
                 'title'       => $data['title'],
-                'datetime'    => $date
+                'date'        => $data['date'],
+                'time'        => $data['time']
             ]);
 
             dispatch(new SendMail($todo));
@@ -86,15 +90,26 @@ class TodoService {
                 ];
             }
 
-            unset($data['id']);
+            $date = Carbon::parse($data['date'] . $data['time']);
+
+            if ($date->isPast() == 1) {
+                return [
+                    'success' => false,
+                    'message' => 'The date and time cannot be in the past!'
+                ];
+            }
+
             $data = array_filter($data);
 
             $todo->fill([
                 'title'    => isset($data['title']) ? $data['title'] : $todo->title,
-                'datetime' => Carbon::parse($data['date'] . $data['time']),
+                'date'     => $data['date'],
+                'time'     => $data['time'],
             ]);
 
             $todo->save();
+
+            dispatch(new SendUpdateNotification($todo));
 
             return [
                 'success' => true,
