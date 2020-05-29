@@ -4,6 +4,6 @@
     <div>
         You have created a new To Do task: {{ $task_name }}
 
-        For: {{ $task_datetime }}
+        For: {{ $task_date }} : {{ $task_time }}
     </div>
 </div>

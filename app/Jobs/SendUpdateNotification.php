@@ -34,7 +34,7 @@ class SendUpdateNotification implements ShouldQueue
 
             $user = User::find($this->todo->user_id);
 
-            Mail::to($user->email)->send(new UpdateNotification($this->todo->title, $this->todo->datetime));
+            Mail::to($user->email)->send(new UpdateNotification($this->todo->title, $this->todo->date, $this->todo->time));
         } catch (\Exception $e) {
             \Log::error('[' . __CLASS__ . ' --> ' . __FUNCTION__ . ']: ' . $e->getMessage());
         }

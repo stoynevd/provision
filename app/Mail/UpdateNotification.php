@@ -12,15 +12,17 @@ class UpdateNotification extends Mailable
     use Queueable, SerializesModels;
 
     public $task_name;
-    public $task_datetime;
+    public $task_date;
+    public $task_time;
 
-    public function __construct($task_name, $task_datetime) {
+    public function __construct($task_name, $task_date, $task_time) {
         $this->task_name = $task_name;
-        $this->task_datetime = $task_datetime;
+        $this->task_date = $task_date;
+        $this->task_time = $task_time;
     }
 
     public function build() {
         return $this->from(['address' => 'stoynevd@aston.ac.uk', 'name' => 'Dimitar Stoynev'])
-            ->view('emails.createnotification');
+            ->view('emails.updatenotification');
     }
 }
